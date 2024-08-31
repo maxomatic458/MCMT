@@ -32,7 +32,7 @@ import net.minecraft.core.Registry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtUtils;
 import net.minecraft.network.chat.Component;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.server.commands.LocateCommand;
 import net.minecraft.server.level.ServerLevel;
@@ -41,7 +41,8 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.TickingBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.structure.Structure;
 
 public class DebugCommands {
 
@@ -53,8 +54,8 @@ public class DebugCommands {
 					BlockPos bp = loc.getBlockPos(cmdCtx.getSource());
 					ServerLevel sw = cmdCtx.getSource().getLevel();
 					BlockState bs = sw.getBlockState(bp);
-					TextComponent message = new TextComponent(
-							"Block at " + bp + " is " + bs.getBlock().getRegistryName());
+					Component message = Component.literal(
+							"Block at " + bp + " is " + bs.getBlock().getName());
 					cmdCtx.getSource().sendSuccess(message, true);
 					System.out.println(message.toString());
 					return 1;
@@ -66,14 +67,14 @@ public class DebugCommands {
 							BlockState bs = sw.getBlockState(bp);
 							BlockEntity te = sw.getBlockEntity(bp);
 							if (te == null) {
-								TextComponent message = new TextComponent(
-										"Block at " + bp + " is " + bs.getBlock().getRegistryName() + " has no NBT");
+								Component message = Component.literal(
+										"Block at " + bp + " is " + bs.getBlock().getName() + " has no NBT");
 								cmdCtx.getSource().sendSuccess(message, true);
 							}
 							CompoundTag nbt = te.serializeNBT();
 							Component itc = NbtUtils.toPrettyComponent(nbt);
-							TextComponent message = new TextComponent(
-									"Block at " + bp + " is " + bs.getBlock().getRegistryName() + " with TE NBT:");
+							Component message = Component.literal(
+									"Block at " + bp + " is " + bs.getBlock().getName() + " with TE NBT:");
 							cmdCtx.getSource().sendSuccess(message, true);
 							cmdCtx.getSource().sendSuccess(itc, true);
 							// System.out.println(message.toString());
@@ -89,11 +90,11 @@ public class DebugCommands {
 							BlockEntity te = sw.getBlockEntity(bp);
 							if (te instanceof TickingBlockEntity) {
 								((TickingBlockEntity) te).tick();
-								TextComponent message = new TextComponent(
+								Component message = Component.literal(
 										"Ticked " + te.getClass().getName() + " at " + bp);
 								cmdCtx.getSource().sendSuccess(message, true);
 							} else {
-								TextComponent message = new TextComponent("No tickable TE at " + bp);
+								Component message = Component.literal("No tickable TE at " + bp);
 								cmdCtx.getSource().sendFailure(message);
 							}
 							return 1;
@@ -124,7 +125,7 @@ public class DebugCommands {
 						}
 					});
 
-					TextComponent message = new TextComponent(
+					Component message = Component.literal(
 							"Classpath Dumped to: " + base.toAbsolutePath().toString());
 					cmdCtx.getSource().sendSuccess(message, true);
 					System.out.println(message.toString());
@@ -139,39 +140,39 @@ public class DebugCommands {
 					UUID id = p.getUUID();
 					int index = structureIdx.computeIfAbsent(id.toString(), (s) -> new AtomicInteger())
 							.getAndIncrement();
-					Registry<ConfiguredStructureFeature<?, ?>> registry = cmdCtx.getSource().getLevel().registryAccess()
-							.registryOrThrow(Registry.CONFIGURED_STRUCTURE_FEATURE_REGISTRY);
-					List<Holder.Reference<ConfiguredStructureFeature<?, ?>>> targets = registry.holders()
+					Registry<Structure> registry = cmdCtx.getSource().getLevel().registryAccess()
+							.registryOrThrow(Registry.STRUCTURE_REGISTRY);
+					List<Holder.Reference<Structure>> targets = registry.holders()
 							.collect(Collectors.toUnmodifiableList());
-					Holder.Reference<ConfiguredStructureFeature<?, ?>> target = null;
+					Holder.Reference<Structure> target = null;
 					if (index >= targets.size()) {
 						target = targets.get(0);
 						structureIdx.computeIfAbsent(id.toString(), (s) -> new AtomicInteger()).set(0);
 					} else {
 						target = targets.get(index);
 					}
-					Pair<BlockPos, Holder<ConfiguredStructureFeature<?, ?>>> dst = cmdCtx.getSource().getLevel()
-							.getChunkSource().getGenerator().findNearestMapFeature(cmdCtx.getSource().getLevel(),
+					Pair<BlockPos, Holder<Structure>> dst = cmdCtx.getSource().getLevel()
+							.getChunkSource().getGenerator().findNearestMapStructure(cmdCtx.getSource().getLevel(),
 									HolderSet.direct(target), srcpos, 100, false);
 					if (dst == null) {
-						TextComponent message = new TextComponent(
+						Component message = Component.literal(
 								"Failed locating " + target.key().location().toString() + " from " + srcpos);
 						cmdCtx.getSource().sendSuccess(message, true);
 						return 1;
 					}
-					TextComponent message = new TextComponent("Found target; loading now");
+					Component message = Component.literal("Found target; loading now");
 					cmdCtx.getSource().sendSuccess(message, true);
 					p.teleportTo(dst.getFirst().getX(), srcpos.getY(), dst.getFirst().getZ());
-					Holder.Reference<ConfiguredStructureFeature<?, ?>> targetf = target;
-					ResourceOrTagLocationArgument.Result<ConfiguredStructureFeature<?, ?>> thing = new Result<ConfiguredStructureFeature<?, ?>>() {
+					Holder.Reference<Structure> targetf = target;
+					ResourceOrTagLocationArgument.Result<Structure> thing = new Result<Structure>() {
 
 						@Override
-						public boolean test(Holder<ConfiguredStructureFeature<?, ?>> t) {
+						public boolean test(Holder<Structure> t) {
 							return false;
 						}
 
 						@Override
-						public Either<ResourceKey<ConfiguredStructureFeature<?, ?>>, TagKey<ConfiguredStructureFeature<?, ?>>> unwrap() {
+						public Either<ResourceKey<Structure>, TagKey<Structure>> unwrap() {
 							return Either.left(targetf.key());
 						}
 
@@ -185,7 +186,7 @@ public class DebugCommands {
 							return null;
 						}
 					};
-					LocateCommand.showLocateResult(cmdCtx.getSource(), thing, srcpos, dst, "commands.locate.success");
+					LocateCommand.showLocateResult(cmdCtx.getSource(), thing, srcpos, dst, "commands.locate.success", false);
 					return 1;
 				})))
 		/* */

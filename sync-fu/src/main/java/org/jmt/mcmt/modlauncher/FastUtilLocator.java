@@ -37,7 +37,7 @@ public class FastUtilLocator implements IModLocator {
 	private boolean isActive = true;
 	
 	@Override
-	public List<IModFile> scanMods() {
+	public List<ModFileOrException> scanMods() {
 		LOGGER.info("Sync_Fu preparing...");
 		LOGGER.info("Prepping fu_add...");
 		Optional<URL> fujarurl = Arrays.stream(System.getProperty("java.class.path").split(File.pathSeparator)).flatMap(path -> {
@@ -105,14 +105,14 @@ public class FastUtilLocator implements IModLocator {
 				return out;
 			};
 			SecureJar sj = SecureJar.from(manifestGen, modulehack, path);
-			sj.getManifest().getMainAttributes().putValue("FMLModType", "GAMELIBRARY");
+			sj.moduleDataProvider().getManifest().getMainAttributes().putValue("FMLModType", "GAMELIBRARY");
 			ModFile mf = new ModFile(sj, this, FastUtilLocator::modfileinfoinator);
 			System.out.println("SUPERTEST9001 TEST:" + mf.getType());
 			imf.add(mf);
 		} catch (URISyntaxException e) {
 			e.printStackTrace();
 		}
-		return imf;
+		return Arrays.asList(new ModFileOrException(imf.get(0), null));
 	}
 	
 	private static IModFileInfo modfileinfoinator(IModFile idgaf) {

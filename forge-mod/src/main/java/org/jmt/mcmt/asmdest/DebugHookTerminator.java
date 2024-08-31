@@ -3,6 +3,7 @@ package org.jmt.mcmt.asmdest;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.LockSupport;
@@ -89,12 +90,12 @@ public class DebugHookTerminator {
 							completableFuture.complete(Either.left(out));
 						} else {
 							try {
-								CompoundTag cnbt = scp.chunkMap.readChunk(new ChunkPos(chunkpos));
-								if (cnbt != null) {
-									ProtoChunk cp = ChunkSerializer.read(scp.level, scp.getPoiManager(), new ChunkPos(chunkpos), cnbt);
+								Optional<CompoundTag> cnbt = scp.chunkMap.read(new ChunkPos(chunkpos)).get();
+								if (cnbt.isPresent()) {
+									ProtoChunk cp = ChunkSerializer.read(scp.level, scp.getPoiManager(), new ChunkPos(chunkpos), cnbt.get());
 									completableFuture.complete(Either.left(new LevelChunk(scp.level, cp, null)));
 								}
-							} catch (IOException e) {
+							} catch (Exception e) {
 								e.printStackTrace();
 							}
 							completableFuture.complete(ChunkHolder.UNLOADED_CHUNK);

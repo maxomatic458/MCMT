@@ -19,7 +19,6 @@ import net.minecraftforge.common.MinecraftForge;
 /* 1.16.1 code; AKA the only thing that changed  */
 import net.minecraftforge.event.RegisterCommandsEvent;
 /* */
-import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -104,14 +103,14 @@ public class MCMT
 
     @Mod.EventBusSubscriber(bus=Mod.EventBusSubscriber.Bus.MOD)
     public static class RegistryEvents {
-        @SubscribeEvent
-        public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
+        // @SubscribeEvent
+        // public static void onBlocksRegistry(final RegistryEvent.Register<Block> blockRegistryEvent) {
 
-        }
+        // }
         
-        @SubscribeEvent
-    	public static void registerEntities(RegistryEvent.Register<EntityType<?>> e) {
+        // @SubscribeEvent
+    	// public static void registerEntities(RegistryEvent.Register<EntityType<?>> e) {
 
-    	}
+    	// }
     }
 }

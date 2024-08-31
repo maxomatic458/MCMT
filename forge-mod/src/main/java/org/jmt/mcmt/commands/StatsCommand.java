@@ -13,7 +13,7 @@ import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
-import net.minecraft.network.chat.TextComponent;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.MinecraftServer;
 
 public class StatsCommand {
@@ -24,7 +24,7 @@ public class StatsCommand {
 			return 1;
 		})).executes(cmdCtx -> {
 			if (!threadStats) {
-				TextComponent message = new TextComponent("Stat calcs are disabled so stats are out of date"); 
+				Component message = Component.literal("Stat calcs are disabled so stats are out of date"); 
 				cmdCtx.getSource().sendSuccess(message, true);
 			}
 			StringBuilder messageString = new StringBuilder(
@@ -33,14 +33,14 @@ public class StatsCommand {
 			messageString.append(" Entity:" + mean(maxEntities, liveValues));
 			messageString.append(" TE:" + mean(maxTEs, liveValues));
 			messageString.append(" Env:" + mean(maxEnvs, liveValues) + ")");
-			TextComponent message = new TextComponent(messageString.toString());
+			Component message = Component.literal(messageString.toString());
 			cmdCtx.getSource().sendSuccess(message, true);
 			return 1;
 		}).then(Commands.literal("toggle").requires(cmdSrc -> {
 			return cmdSrc.hasPermission(2);
 		}).executes(cmdCtx -> {
 			threadStats = !threadStats;
-			TextComponent message = new TextComponent("Stat calcs are " + 
+			Component message = Component.literal("Stat calcs are " + 
 					(!threadStats ? "disabled" : "enabled") + "!");
 			cmdCtx.getSource().sendSuccess(message, true);
 			return 1;
@@ -48,13 +48,13 @@ public class StatsCommand {
 			return cmdSrc.hasPermission(2);
 		}).executes(cmdCtx -> {
 			doLogging = true;
-			TextComponent message = new TextComponent("Logging started!");
+			Component message = Component.literal("Logging started!");
 			cmdCtx.getSource().sendSuccess(message, true);
 			return 1;
 		})).then(Commands.literal("stoplog").requires(cmdSrc -> {
 			return cmdSrc.hasPermission(2);
 		}).executes(cmdCtx -> {
-			TextComponent message = new TextComponent("Logging stopping...");
+			Component message = Component.literal("Logging stopping...");
 			cmdCtx.getSource().sendSuccess(message, true);
 			doLogging = false;
 			return 1;
