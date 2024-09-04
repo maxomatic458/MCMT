@@ -9,5 +9,5 @@ package org.jmt.mcmt;
  */
 public class Constants {
 
-	public static final String MOD_ID = "jmt_mcmt";
+	public static final String MOD_ID = "mcmt_reforged";
 }

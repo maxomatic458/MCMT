@@ -36,7 +36,7 @@ minecraft {
             //property 'forge.logging.console.level', 'TRACE'
 
             mods {
-                jmt_mcmt {
+                mcmt_reforged {
                     source sourceSets.main                    
                 }
             }
@@ -58,7 +58,7 @@ minecraft {
             property 'forge.logging.console.level', 'debug'
 
             mods {
-                jmt_mcmt {
+                mcmt_reforged {
                     source sourceSets.main                    
                 }
             }
@@ -83,7 +83,7 @@ minecraft {
             args '--mod', 'examplemod', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
 
             mods {
-                jmt_mcmt {
+                mcmt_reforged {
                     source sourceSets.main                    
                 }
             }
@@ -127,12 +127,12 @@ jar {
 	classifier "modcore"
     manifest {
         attributes([
-            "Specification-Title": "jmt_mcmt",
-            "Specification-Vendor": "jmtmakesthings",
+            "Specification-Title": "mcmt_reforged",
+            "Specification-Vendor": "maxomatic458",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
-            "Implementation-Vendor" :"jmtmakesthings",
+            "Implementation-Vendor" :"maxomatic458",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
         ])
     }

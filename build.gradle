@@ -15,7 +15,7 @@ allprojects {
 	apply plugin: 'java'
 	version = "${mcmt_ver}"
 	group = 'org.jmt.mcmt' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-	archivesBaseName = "jmt_mcmt-${mc_ver}"
+	archivesBaseName = "mcmt-${mc_ver}"
 
 }
 

@@ -4,31 +4,32 @@ modLoader="javafml"
 # A version range to match for said mod loader - for regular FML @Mod it will be the forge version
 loaderVersion="[43,)"
 # A URL to refer people to when problems occur with this mod
-issueTrackerURL="https://github.com/jediminer543/JMT-MCMT/issues"
+issueTrackerURL="https://github.com/maxomatic458/MCMT/issues"
 # A list of mods - how many allowed here is determined by the individual mod loader
 [[mods]] #mandatory
 # The modid of the mod
-modId="jmt_mcmt" #mandatory
+modId="mcmt_reforged" #mandatory
 version="${file.jarVersion}" #mandatory
-displayName="JMT MCMT"
-displayURL="https://github.com/jediminer543/JMT-MCMT"
-updateJSONURL="https://gitcdn.link/repo/jediminer543/JMT-MCMT/master/etc/update.json"
+displayName="MCMT Reforged"
+displayURL="https://github.com/maxomatic458/MCMT"
+# updateJSONURL="https://gitcdn.link/repo/jediminer543/JMT-MCMT/master/etc/update.json"
 # logoFile="examplemod.png" #optional
-credits="The glorious power of Coremods" #optional
-authors="jediminer543"
+credits="Coremods & jediminer543 for the original MCMT mod"  #optional
+authors="maxomatic458"
 # The description text for the mod (multi line!) (#mandatory)
 description='''
+A fork of the original MCMT mod by jediminer543, made to work with newer versions of minecraft:
 A bunch of core mod based assembly hacks that allow for the parallelised running of mineccraft
 
 Absurd, likely incompatible with everything, but somehow works
 '''
-[[dependencies.jmt_mcmt]] #optional
+[[dependencies.mcmt_reforged]] #optional
     modId="forge"
     mandatory=true
     versionRange="[@FORGE_VER@,)"
     ordering="NONE"
     side="SERVER"
-[[dependencies.jmt_mcmt]]
+[[dependencies.mcmt_reforged]]
     modId="minecraft"
     mandatory=true
     versionRange="[@MC_VER@]"

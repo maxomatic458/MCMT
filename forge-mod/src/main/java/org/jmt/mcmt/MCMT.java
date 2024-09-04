@@ -13,8 +13,6 @@ import org.jmt.mcmt.serdes.SerDesRegistry;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.minecraft.commands.CommandSourceStack;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.MinecraftForge;
 /* 1.16.1 code; AKA the only thing that changed  */
 import net.minecraftforge.event.RegisterCommandsEvent;
@@ -29,7 +27,7 @@ import net.minecraftforge.fml.event.lifecycle.InterModProcessEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 // The value here should match an entry in the META-INF/mods.toml file
-@Mod("jmt_mcmt")
+@Mod("mcmt_reforged")
 public class MCMT
 {
 	
